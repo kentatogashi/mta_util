@@ -1,4 +1,13 @@
 #!/usr/local/bin/bash
+# queuelife_change.sh is a tool for change queue lifetime.
+# 
+# Usage:
+#     queuelife_change.sh <mta> <lifetime>
+# 
+# Arg:
+#     <mta>:  qmail|postfix
+#     <lifetime>: 30|300|600|1800
+
 PATH=/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 PROGNAME=$(basename ${0})
 
@@ -46,8 +55,8 @@ function has_postfix {
 function change_qmail_lifetime {
     if [ -f ${QMAIL_CONF} ]
     then
-        CURRENT_LIFETIME=$(cat ${QMAIL_CONF})
-        echo "Change queuelifetime? [${CURRENT_LIFETIME} => ${LIFETIME}] [ yes | no ]"
+        local current_lifetime=$(cat ${QMAIL_CONF})
+        echo "Change queuelifetime? [${current_lifetime} => ${LIFETIME}] [ yes | no ]"
         read ans
         echo
         [ "${ans}" != "yes" ] && err_exit "abort."
@@ -72,9 +81,9 @@ function change_qmail_lifetime {
 function change_postfix_lifetime {
     if has_postfix
     then
-        CURRENT_LIFETIME="$(postconf | grep lifetime)"
+        local current_time="$(postconf | grep lifetime)"
         echo "Change queuelifetime? ["
-        echo "${CURRENT_LIFETIME} => ${LIFETIME}s] [ yes | no ]"
+        echo "${current_time} => ${LIFETIME}s] [ yes | no ]"
         read ans
         echo
         [ "${ans}" != "yes" ] && err_exit "abort."
