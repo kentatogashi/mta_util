@@ -37,7 +37,6 @@ function backup {
     fi
 }
 
-
 function has_postfix {
     grep -q '^postfix:' $PASSWD
     return $?
