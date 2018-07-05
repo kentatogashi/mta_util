@@ -73,19 +73,19 @@ function change_qmail_lifetime {
 function change_postfix_lifetime {
     if has_postfix
     then
-              CURRENT_LIFETIME="$(postconf | grep lifetime)"
+        CURRENT_LIFETIME="$(postconf | grep lifetime)"
         echo "Change queuelifetime? ["
         echo "$CURRENT_LIFETIME => ${LIFETIME}s] [ yes | no ]"
         read ans
         echo
         [ "${ans}" != "yes" ] && err_exit "abort."
-              backup $POSTFIX_CONF
-              sed -i "" -e "s/^bounce_queue_lifetime = \(.*\)$/bounce_queue_lifetime = ${LIFETIME}s/" \
-                    -e "s/maximal_queue_lifetime = \(.*\)/maximal_queue_lifetime = ${LIFETIME}s/" $POSTFIX_CONF
-              postfix check || err_exit "main.cf has syntax error."
-              postfix reload || err_exit "failed to reload postfix."
+        backup $POSTFIX_CONF
+        sed -i "" -e "s/^bounce_queue_lifetime = \(.*\)$/bounce_queue_lifetime = ${LIFETIME}s/" \
+                  -e "s/maximal_queue_lifetime = \(.*\)/maximal_queue_lifetime = ${LIFETIME}s/" $POSTFIX_CONF
+        postfix check || err_exit "main.cf has syntax error."
+        postfix reload || err_exit "failed to reload postfix."
     else
-              err_exit "postfix is not installed."
+        err_exit "postfix is not installed."
     fi
 }
 
